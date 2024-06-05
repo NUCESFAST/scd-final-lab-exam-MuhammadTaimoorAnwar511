@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout Code1232') {
             steps {
-                git url: "${REPO_URL}", branch: 'main'
+                git url: "${REPO_URL}", branch: 'master'
             }
         }
 
@@ -47,7 +47,7 @@ pipeline {
         stage('Deploy and Validate1232') {
             steps {
                 sh 'docker-compose up -d'
-                
+                // Add validation steps if necessary, such as checking service health or running tests
             }
         }
     }
