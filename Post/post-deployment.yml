@@ -1,0 +1,36 @@
+# post-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post
+  namespace: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post
+  template:
+    metadata:
+      labels:
+        app: post
+    spec:
+      containers:
+        - name: post
+          image: taimooranwar/post:latest
+          ports:
+            - containerPort: 3232
+          env:
+            - name: MONGO_URI
+              value: mongodb://mongo:27017/post
+---
+# post-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: post
+  namespace: my-app
+spec:
+  ports:
+    - port: 3232
+  selector:
+    app: post

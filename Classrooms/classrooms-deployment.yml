@@ -1,0 +1,36 @@
+# classrooms-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: classrooms
+  namespace: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: classrooms
+  template:
+    metadata:
+      labels:
+        app: classrooms
+    spec:
+      containers:
+        - name: classrooms
+          image: taimooranwar/classrooms:latest
+          ports:
+            - containerPort: 3232
+          env:
+            - name: MONGO_URI
+              value: mongodb://mongo:27017/classrooms
+---
+# classrooms-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: classrooms
+  namespace: my-app
+spec:
+  ports:
+    - port: 3232
+  selector:
+    app: classrooms

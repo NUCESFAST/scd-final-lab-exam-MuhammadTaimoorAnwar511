@@ -1,0 +1,50 @@
+==
+assignment-3-kubernetes-MuhammadTaimoorAnwar511\episode-01
+=
+docker build -t taimooranwar/mern-episode-01-frontend:latest ./fronted
+docker push taimooranwar/mern-episode-01-frontend:latest
+docker build -t taimooranwar/mern-episode-01-backend:latest
+docker build -t taimooranwar/mern-episode-01-backend:latest ./backend
+==
+backend-deployment.yml
+frontend-deployment.yml
+database-py.yml
+==
+push to git
+==
+k8s
+==
+master node:
+kubeadm init --apiserver-advertise-address $(hostname -i) --pod-network-cidr 10.5.0.0/16
+
+kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
+===
+slave node
+kubeadm join 192.168.0.18:6443 --token xgnoi1.7x21qcfzuaee6lw2 \
+>         --discovery-token-ca-cert-hash sha256:2789b5aa10f7d5e6399aed0a3110a183ef6e966befbe1ca02b92b20f593399e8 
+==
+master node:
+
+git clone https://github.com/fast-isb/assignment-3-kubernetes-MuhammadTaimoorAnwar511.git
+
+kubectl apply -f assignment-3-kubernetes-MuhammadTaimoorAnwar511/episode-01/
+
+kubectl get pods
+===
+1.	kubectl get services -o wide 
+2.	kubectl get deployments -o wide 
+3.	kubectl get pods -o wide 
+4.	kubectl get pv -o wide 
+5.	kubectl get pvc -o wide 
+==
+kubectl scale deployment/backend-episode-01 --replicas=3 
+kubectl scale deployment/frontend-episode-01 --replicas=3 
+==
+kubectl get deployments -o wide 
+kubectl get pods -o wide
+==
+kubectl delete pod backend-episode-01-<podnumber> 
+kubectl get pods -o wide 
+==
+
+ 

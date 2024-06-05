@@ -1,0 +1,34 @@
+# client-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  namespace: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: taimooranwar/client:latest
+          ports:
+            - containerPort: 1232
+---
+# client-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: client
+  namespace: my-app
+spec:
+  ports:
+    - port: 1232
+  selector:
+    app: client
+  type: LoadBalancer

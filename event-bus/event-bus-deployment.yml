@@ -1,0 +1,33 @@
+# event-bus-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-bus
+  namespace: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-bus
+  template:
+    metadata:
+      labels:
+        app: event-bus
+    spec:
+      containers:
+        - name: event-bus
+          image: taimooranwar/event-bus:latest
+          ports:
+            - containerPort: 3232
+---
+# event-bus-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus
+  namespace: my-app
+spec:
+  ports:
+    - port: 3232
+  selector:
+    app: event-bus

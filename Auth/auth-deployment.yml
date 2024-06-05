@@ -1,0 +1,36 @@
+# auth-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: taimooranwar/auth:latest
+          ports:
+            - containerPort: 3232
+          env:
+            - name: MONGO_URI
+              value: mongodb://mongo:27017/auth
+---
+# auth-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+  namespace: my-app
+spec:
+  ports:
+    - port: 3232
+  selector:
+    app: auth
