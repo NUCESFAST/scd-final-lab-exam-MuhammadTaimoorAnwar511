@@ -34,9 +34,9 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
                         def services = ['Auth', 'Classrooms', 'event-bus', 'Post', 'client']
+                        sh "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin"
                         services.each { service ->
                             def imageName = "${DOCKERHUB_REPO}/${service.toLowerCase()}"
-                            sh "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin"
                             sh "docker push ${imageName}"
                         }
                     }
