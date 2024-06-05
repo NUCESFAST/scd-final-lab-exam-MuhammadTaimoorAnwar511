@@ -8,53 +8,53 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code1232') {
+        stage('Checkout Code') {
             steps {
-                git url: "${REPO_URL}", branch: 'main'
+                git url: "${REPO_URL}", branch: 'master'
             }
         }
 
-        stage('Build Docker Images1232') {
+        stage('Build Docker Images') {
             steps {
                 script {
                     def services = ['Auth', 'Classrooms', 'event-bus', 'Post', 'client']
                     services.each { service ->
                         dir("${service}") {
-                            sh 'npm install'
+                            bat 'npm install'  // Use 'bat' for Windows equivalent of 'sh'
                             def imageName = "${DOCKERHUB_REPO}/${service.toLowerCase()}"
-                            sh "docker build -t ${imageName} ."
+                            bat "docker build -t ${imageName} ."
                         }
                     }
                 }
             }
         }
 
-        stage('Push Docker Images to Docker Hub1232') {
+        stage('Push Docker Images to Docker Hub') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
                         def services = ['Auth', 'Classrooms', 'event-bus', 'Post', 'client']
                         services.each { service ->
                             def imageName = "${DOCKERHUB_REPO}/${service.toLowerCase()}"
-                            sh "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin"
-                            sh "docker push ${imageName}"
+                            bat "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin"
+                            bat "docker push ${imageName}"
                         }
                     }
                 }
             }
         }
 
-        stage('Deploy and Validate1232') {
+        stage('Deploy and Validate') {
             steps {
-                sh 'docker-compose up -d'
-                
+                bat 'docker-compose up -d'
+                // Add validation steps if necessary, such as checking service health or running tests
             }
         }
     }
 
     post {
         always {
-            sh 'docker-compose down'
+            bat 'docker-compose down'
         }
     }
 }
