@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  auth:
+    build:
+      context: ./Auth
+    ports:
+      - "3232:3232"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/auth
+
+  classrooms:
+    build:
+      context: ./Classrooms
+    ports:
+      - "3232:3232"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/classrooms
+
+  event-bus:
+    build:
+      context: ./event-bus
+    ports:
+      - "3232:3232"
+
+  post:
+    build:
+      context: ./Post
+    ports:
+      - "3232:3232"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/post
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - "1232:1232"
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongo-data:
